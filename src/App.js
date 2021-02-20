@@ -31,10 +31,8 @@ function App() {
     const id = Math.floor(Math.random() * 10000) + 1
     const newTask = { id, ...task }
     setTasks([...tasks, newTask])
-    
+ 
   }
-
-
   
   // delete Tasks
   const deleteTask = (id) => {
