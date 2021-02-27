@@ -10,10 +10,11 @@ const AddTask = ({ onAdd  }) => {
       alert('please fill the task fild ');
       return 
     }
-    onAdd({ text, day, reminder });
+    console.log(`${text}`);
+    onAdd( { text, day, reminder } );
     setText("")
     setDay("")
-    setReminder("");
+    setReminder(false);
   }
   return (
     <form className="add-form p-10" onSubmit={ onSubmit }>

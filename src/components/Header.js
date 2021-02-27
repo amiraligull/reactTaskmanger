@@ -1,18 +1,13 @@
 import PropTypes from "prop-types";
 import Button from "./Button";
-const Header = ({ title }) => {
-   const onClick = (e) => {
-     console.log("clicked");
-   };
-
-    return (
-      <div className="flex bg-indigo-500 p-10 shadow-xl">
-        <h1 className="flex-1 text-white text-2xl "> {title}</h1>
-
-        <Button onClick={onClick} />
-      </div>
-    );
-}
+const Header = ({ title, onAdd, showAdd }) => {
+  return (
+    <div className="flex bg-indigo-500 p-10 shadow-xl">
+      <h1 className="flex-1 text-white text-2xl "> {title}</h1>
+      <Button onClick={onAdd} text={ showAdd ? 'close' : 'add' } showAdd={showAdd} />
+    </div>
+  );
+};
 
 Header.defaultProps = {
     title: 'Task Manager',

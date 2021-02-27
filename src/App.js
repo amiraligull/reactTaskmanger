@@ -1,41 +1,44 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
 function App() {
+  const [tasks, setTasks] = useState([ ]);
+  const [showAddTask, setShowAddTask] = useState(false);
+ 
+  // fetch data method
+    const fetchTasks = async () => {
+    const res = await fetch(" http://localhost:5000/tasks");
+    const data = await res.json();
+    setTasks(data);
+    return data;
+  };
+  useEffect(() => {
+  fetchTasks()
+  }, [])
 
-    const [tasks, setTasks] = useState([
-      {
-        id: 1,
-        text: "Doctor Appoinment",
-        day: "feb 5th at 2:30pm",
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: "Amir Appoinment",
-        day: "feb 6th at 2:30pm",
-        reminder: true,
-      },
-      {
-        id: 3,
-        text: "Ayesha Appoinment",
-        day: "feb 7th at 2:30pm",
-        reminder: true,
-      },
-    ]);
 
 // add task
-  const addTask = (task) => {
-    console.log(task);
-    const id = Math.floor(Math.random() * 10000) + 1
-    const newTask = { id, ...task }
-    setTasks([...tasks, newTask])
- 
-  }
+  const addTask = async (task) => {
+    const respond = fetch(`http://localhost:5000/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-type' : 'application/json'
+      },
+      // the below json.stringify() is used to convert object or aray in to json notation
+      body: JSON.stringify(task),
+    }) 
+    
+    const data = await respond.json();
   
+    setTasks([...tasks, data])
+  }
+
   // delete Tasks
-  const deleteTask = (id) => {
+  const deleteTask = async (id) => {
+    const del = await fetch(`http://localhost:5000/tasks/${id}`, {
+      method:  'Delete',
+    })
         setTasks(tasks.filter((task)=>task.id !== id))
   };
  // togelReminder
@@ -50,8 +53,10 @@ function App() {
   return (
     <div className="App p-36 pt-2  bg-gray-800 ">
       <div className=" shadow-l border-1 border-gray-200 bg-gray-100">
-        <Header />
-        <AddTask onAdd={ addTask } />
+        <Header onAdd={() => setShowAddTask(!showAddTask)}
+        showAdd={showAddTask}
+        />
+        {showAddTask && <AddTask onAdd={addTask} />}
         <Tasks tasks={tasks} onDelete={deleteTask} onToggel={togelReminder} />
       </div>
     </div>
